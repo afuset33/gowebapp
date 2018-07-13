@@ -4,11 +4,18 @@ import (
 	"html/template"
 	"log"
 	"net/http"
+	"gowebapp/validator"
 )
 
 type Result struct {
 	ResultMsg string
 	Password  string
+	Err
+}
+
+type Err struct {
+	ErrMsg string
+	isErr  bool
 }
 
 func main() {
@@ -37,6 +44,12 @@ func resultHandler(w http.ResponseWriter, r *http.Request) {
 		ResultMsg: "パスワードの強度は 強 です",
 		Password:  r.Form.Get("password")}
 
+	if validator.Required(result.Password) {
+		err := Err{
+			ErrMsg: "パスワードが入力されていません",
+			isErr:  true}
+		result.Err = err
+	}
 	// テンプレートを描画
 	if err := t.ExecuteTemplate(w, "result.tpl", result); err != nil {
 		log.Fatal(err)

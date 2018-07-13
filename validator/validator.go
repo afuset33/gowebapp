@@ -1,5 +1,5 @@
 package validator
 
-func required() result boolean {
-	return result
+func Required(value string) (result bool) {
+	return result == (len(value) == 0)
 }
