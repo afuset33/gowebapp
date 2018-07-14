@@ -1,5 +1,6 @@
 package validator
 
 func Required(value string) (result bool) {
-	return result == (len(value) == 0)
+	result = (len(value) == 0)
+	return
 }

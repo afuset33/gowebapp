@@ -12,7 +12,7 @@
             <input name="password" type="text"></input>
         </div>
         <div>
-            <button name="submit" type="submit">送信</button>
+            <button name="submit" type="submit">判定</button>
         </div>
     </form>
 </body>

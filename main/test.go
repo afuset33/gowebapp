@@ -1,21 +1,15 @@
 package main
 
 import (
+	"gowebapp/checker"
 	"html/template"
 	"log"
 	"net/http"
-	"gowebapp/validator"
 )
 
 type Result struct {
 	ResultMsg string
 	Password  string
-	Err
-}
-
-type Err struct {
-	ErrMsg string
-	isErr  bool
 }
 
 func main() {
@@ -40,16 +34,19 @@ func resultHandler(w http.ResponseWriter, r *http.Request) {
 
 	// フォームからパスワードを取得
 	r.ParseForm()
+
+	// パスワードの強度を判定
+	var strength string = "弱"
+	if checker.LengthCheck(r.Form.Get("password"), 8) {
+		strength = "中"
+	}
+	if checker.ComboUpperLowerCase(r.Form.Get("password")) {
+		strength = "強"
+	}
 	result := Result{
-		ResultMsg: "パスワードの強度は 強 です",
+		ResultMsg: "パスワードの強度は " + strength + " です",
 		Password:  r.Form.Get("password")}
 
-	if validator.Required(result.Password) {
-		err := Err{
-			ErrMsg: "パスワードが入力されていません",
-			isErr:  true}
-		result.Err = err
-	}
 	// テンプレートを描画
 	if err := t.ExecuteTemplate(w, "result.tpl", result); err != nil {
 		log.Fatal(err)
