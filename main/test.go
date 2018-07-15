@@ -26,6 +26,7 @@ func handler(w http.ResponseWriter, r *http.Request) {
 	if err := t.Execute(w, nil); err != nil {
 		log.Fatal(err)
 	}
+	log.Printf("call handler")
 }
 
 func resultHandler(w http.ResponseWriter, r *http.Request) {
@@ -36,13 +37,32 @@ func resultHandler(w http.ResponseWriter, r *http.Request) {
 	r.ParseForm()
 
 	// パスワードの強度を判定
-	var strength string = "弱"
+	strength := "弱"
+	satisfy := 0
 	if checker.LengthCheck(r.Form.Get("password"), 8) {
-		strength = "中"
+		//strength = "中"
+		satisfy++
 	}
 	if checker.ComboUpperLowerCase(r.Form.Get("password")) {
+		//strength = "強"
+		satisfy++
+	}
+	if checker.ComboCharaType(r.Form.Get("password"), 2) {
+		satisfy++
+	}
+	if checker.ContinuousChar(r.Form.Get("passowrd"), 3) {
+		satisfy++
+	}
+
+	switch {
+	case satisfy <= 1:
+		strength = "弱"
+	case satisfy <= 3:
+		strength = "中"
+	case satisfy >= 4:
 		strength = "強"
 	}
+
 	result := Result{
 		ResultMsg: "パスワードの強度は " + strength + " です",
 		Password:  r.Form.Get("password")}
@@ -51,4 +71,5 @@ func resultHandler(w http.ResponseWriter, r *http.Request) {
 	if err := t.ExecuteTemplate(w, "result.tpl", result); err != nil {
 		log.Fatal(err)
 	}
+	log.Printf("call resultHandler")
 }
