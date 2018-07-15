@@ -37,22 +37,8 @@ func resultHandler(w http.ResponseWriter, r *http.Request) {
 	r.ParseForm()
 
 	// パスワードの強度を判定
-	strength := "弱"
-	satisfy := 0
-	if checker.LengthCheck(r.Form.Get("password"), 8) {
-		//strength = "中"
-		satisfy++
-	}
-	if checker.ComboUpperLowerCase(r.Form.Get("password")) {
-		//strength = "強"
-		satisfy++
-	}
-	if checker.ComboCharaType(r.Form.Get("password"), 2) {
-		satisfy++
-	}
-	if checker.ContinuousChar(r.Form.Get("passowrd"), 3) {
-		satisfy++
-	}
+	var strength string
+	satisfy := checker.GetSatisfiedNum(r.Form.Get("password"))
 
 	switch {
 	case satisfy <= 1:
