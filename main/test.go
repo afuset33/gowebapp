@@ -40,12 +40,12 @@ func resultHandler(w http.ResponseWriter, r *http.Request) {
 	var strength string
 	satisfy := checker.GetSatisfiedNum(r.Form.Get("password"))
 
-	switch {
-	case satisfy <= 1:
+	switch satisfy {
+	case 0, 1, 2:
 		strength = "弱"
-	case satisfy <= 3:
+	case 3, 4:
 		strength = "中"
-	case satisfy >= 4:
+	case 5:
 		strength = "強"
 	}
 
