@@ -1,6 +1,7 @@
 package checker
 
 import (
+	"gowebapp/service"
 	"log"
 	"regexp"
 	"strconv"
@@ -14,7 +15,7 @@ lengthCheck
 */
 func lengthCheck(value string, length int) (result bool) {
 	result = len(value) >= length
-	log.Printf("call lengthCheck: result-%s", strconv.FormatBool(result))
+	log.Printf("call lengthCheck: result{%s}", strconv.FormatBool(result))
 	return
 }
 
@@ -27,7 +28,7 @@ func comboUpperLowerCase(value string) (result bool) {
 	isUpper, _ := regexp.MatchString(".*[A-Z]+", value)
 	isLower, _ := regexp.MatchString(".*[a-z]+", value)
 	result = isUpper && isLower
-	log.Printf("call comboUpperLowerCase: result-%s", strconv.FormatBool(result))
+	log.Printf("call comboUpperLowerCase: result{%s}", strconv.FormatBool(result))
 	return
 }
 
@@ -51,7 +52,7 @@ func comboCharaType(value string, condition int) (result bool) {
 		satisfy++
 	}
 	result = satisfy >= condition
-	log.Printf("call comboCharaType: result-%s satisfy-%s", strconv.FormatBool(result), strconv.Itoa(satisfy))
+	log.Printf("call comboCharaType: result{%s} satisfy{%s}", strconv.FormatBool(result), strconv.Itoa(satisfy))
 	return
 }
 
@@ -86,11 +87,28 @@ func continuousChar(value string, condition int) (result bool) {
 		}
 		result = -1 == strings.Index(value, regex)
 		if !result {
-			break
+			log.Printf("call continuousChar: result{%s}", strconv.FormatBool(result))
+			return
 		}
 	}
 
-	log.Printf("call continuousChar: result-%s", strconv.FormatBool(result))
+	log.Printf("call continuousChar: result{%s}", strconv.FormatBool(result))
+	return
+}
+
+func commonWords(value string) (result bool) {
+
+	rows := service.ReadAll()
+	for _, row := range rows {
+		for _, item := range row {
+			result = -1 == strings.Index(value, item)
+			if !result {
+				log.Printf("call commonWords: result{%s}", strconv.FormatBool(result))
+				return
+			}
+		}
+	}
+	log.Printf("call commonWords: result{%s}", strconv.FormatBool(result))
 	return
 }
 
@@ -113,6 +131,9 @@ func GetSatisfiedNum(password string) (satisfy int) {
 	if continuousChar(password, 3) {
 		satisfy++
 	}
-	log.Print("call GetSatisfiedNum: satisfy-" + strconv.Itoa(satisfy))
+	if commonWords(password) {
+		satisfy++
+	}
+	log.Print("call GetSatisfiedNum: satisfy{" + strconv.Itoa(satisfy) + "}")
 	return
 }
