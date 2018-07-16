@@ -8,8 +8,9 @@ import (
 )
 
 type Result struct {
-	ResultMsg string
-	Password  string
+	ResultMsg   string
+	Password    string
+	Suggestions []string
 }
 
 func main() {
@@ -38,7 +39,7 @@ func resultHandler(w http.ResponseWriter, r *http.Request) {
 
 	// パスワードの強度を判定
 	var strength string
-	satisfy := checker.GetSatisfiedNum(r.Form.Get("password"))
+	satisfy, suggestions := checker.GetSatisfiedCondition(r.Form.Get("password"))
 
 	switch satisfy {
 	case 0, 1, 2:
@@ -50,8 +51,9 @@ func resultHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	result := Result{
-		ResultMsg: "パスワードの強度は " + strength + " です",
-		Password:  r.Form.Get("password")}
+		ResultMsg:   "パスワードの強度は " + strength + " です",
+		Password:    r.Form.Get("password"),
+		Suggestions: suggestions}
 
 	// テンプレートを描画
 	if err := t.ExecuteTemplate(w, "result.tpl", result); err != nil {

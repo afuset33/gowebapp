@@ -113,26 +113,36 @@ func commonWords(value string) (result bool) {
 }
 
 /*
-GetSatisfiedNums
-対象の文字列が満足させた条件の数を返します
+GetSatisfiedCondition
+対象の文字列が満足させた条件の数とパスワード強度を上げるための提案メッセージを返します
 TODO:理想は引数に与えられた関数だけを呼び出す
-func GetSatisfiedNum(function ...func) (satisfy int)
+func GetSatisfiedCondition(function ...func) (satisfy int)
 */
-func GetSatisfiedNum(password string) (satisfy int) {
+func GetSatisfiedCondition(password string) (satisfy int, suggestions []string) {
 	if lengthCheck(password, 8) {
 		satisfy++
+	} else {
+		suggestions = append(suggestions, "8文字以上にしてください")
 	}
 	if comboUpperLowerCase(password) {
 		satisfy++
+	} else {
+		suggestions = append(suggestions, "大文字と小文字の組み合わせにしてください")
 	}
 	if comboCharaType(password, 2) {
 		satisfy++
+	} else {
+		suggestions = append(suggestions, "文字種（英字、数字、記号等）を組み合わせましょう")
 	}
 	if continuousChar(password, 3) {
 		satisfy++
+	} else {
+		suggestions = append(suggestions, "同じ文字を連続して使用するのはやめましょう")
 	}
 	if commonWords(password) {
 		satisfy++
+	} else {
+		suggestions = append(suggestions, "一般的な単語を使用するのはやめましょう")
 	}
 	log.Print("call GetSatisfiedNum: satisfy{" + strconv.Itoa(satisfy) + "}")
 	return
