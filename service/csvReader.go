@@ -6,6 +6,9 @@ import (
 	"os"
 )
 
+/*
+CSVファイル全体を読み込み、スライスにして返却します
+*/
 func ReadAll() (rows [][]string) {
 	log.Printf("call ReadLine")
 	fr, errOpen := os.Open("../config/dictionary.csv")

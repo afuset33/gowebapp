@@ -96,6 +96,11 @@ func continuousChar(value string, condition int) (result bool) {
 	return
 }
 
+/*
+commonWords
+対象の文字列が一般的な単語を使用していないか調べます
+一般的な単語は設定用のファイルから読み込みます
+*/
 func commonWords(value string) (result bool) {
 
 	rows := service.ReadAll()

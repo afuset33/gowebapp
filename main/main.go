@@ -13,13 +13,19 @@ type Result struct {
 	Suggestions []string
 }
 
+/*
+ハンドラをリスナーに登録し、リスナーを起動します
+*/
 func main() {
-	http.HandleFunc("/", handler)
+	http.HandleFunc("/", inputHandler)
 	http.HandleFunc("/result", resultHandler)
 	http.ListenAndServe(":8080", nil)
 }
 
-func handler(w http.ResponseWriter, r *http.Request) {
+/*
+パスワード強度判定入力画面を表示するためのリクエストハンドラ
+*/
+func inputHandler(w http.ResponseWriter, r *http.Request) {
 	// テンプレートをパース
 	t := template.Must(template.ParseFiles("../templates/input.tpl"))
 
@@ -27,9 +33,12 @@ func handler(w http.ResponseWriter, r *http.Request) {
 	if err := t.Execute(w, nil); err != nil {
 		log.Fatal(err)
 	}
-	log.Printf("call handler")
+	log.Printf("call inputHandler")
 }
 
+/*
+パスワード強度判定結果画面を表示するためのリクエストハンドラ
+*/
 func resultHandler(w http.ResponseWriter, r *http.Request) {
 	// テンプレートをパース
 	t := template.Must(template.ParseFiles("../templates/result.tpl"))
