@@ -14,7 +14,7 @@
     <div>
         {{.ResultMsg}}
     </div>
-    {{if len .Suggestions}}
+    {{if ne (len .Suggestions) 0}}
     <ul>
         {{range $i, $v := .Suggestions}}
         <li>

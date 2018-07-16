@@ -2,10 +2,15 @@ package main
 
 import (
 	"gowebapp/checker"
+	"gowebapp/validator"
 	"html/template"
 	"log"
 	"net/http"
 )
+
+type Input struct {
+	ErrMsg []string
+}
 
 type Result struct {
 	ResultMsg   string
@@ -30,7 +35,7 @@ func inputHandler(w http.ResponseWriter, r *http.Request) {
 	t := template.Must(template.ParseFiles("../templates/input.tpl"))
 
 	// テンプレートを描画
-	if err := t.Execute(w, nil); err != nil {
+	if err := t.ExecuteTemplate(w, "input.tpl", new(Input)); err != nil {
 		log.Fatal(err)
 	}
 	log.Printf("call inputHandler")
@@ -40,15 +45,31 @@ func inputHandler(w http.ResponseWriter, r *http.Request) {
 パスワード強度判定結果画面を表示するためのリクエストハンドラ
 */
 func resultHandler(w http.ResponseWriter, r *http.Request) {
-	// テンプレートをパース
-	t := template.Must(template.ParseFiles("../templates/result.tpl"))
 
 	// フォームからパスワードを取得
 	r.ParseForm()
+	password := r.Form.Get("password")
+	// バリデーションチェック
+	if valid, errMsgs := validation(password); !valid {
+		input := Input{
+			ErrMsg: errMsgs}
+		// テンプレートをパース
+		t := template.Must(template.ParseFiles("../templates/input.tpl"))
+		// テンプレートを描画
+		if err := t.ExecuteTemplate(w, "input.tpl", input); err != nil {
+			log.Fatal(err)
+		}
+		log.Printf("bariche")
+		log.Printf("call resultHandler")
+		return
+	}
+
+	// テンプレートをパース
+	t := template.Must(template.ParseFiles("../templates/result.tpl"))
 
 	// パスワードの強度を判定
 	var strength string
-	satisfy, suggestions := checker.GetSatisfiedCondition(r.Form.Get("password"))
+	satisfy, suggestions := checker.GetSatisfiedCondition(password)
 
 	switch satisfy {
 	case 0, 1, 2:
@@ -61,7 +82,7 @@ func resultHandler(w http.ResponseWriter, r *http.Request) {
 
 	result := Result{
 		ResultMsg:   "パスワードの強度は " + strength + " です",
-		Password:    r.Form.Get("password"),
+		Password:    password,
 		Suggestions: suggestions}
 
 	// テンプレートを描画
@@ -69,4 +90,22 @@ func resultHandler(w http.ResponseWriter, r *http.Request) {
 		log.Fatal(err)
 	}
 	log.Printf("call resultHandler")
+	return
+}
+
+func validation(password string) (result bool, errMsgs []string) {
+	result = true
+	if valid, msg := validator.Required(password); !valid {
+		errMsgs = append(errMsgs, msg)
+		result = false
+	}
+	if valid, msg := validator.CharType(password); !valid {
+		errMsgs = append(errMsgs, msg)
+		result = false
+	}
+	if valid, msg := validator.MaxLength(password); !valid {
+		errMsgs = append(errMsgs, msg)
+		result = false
+	}
+	return
 }

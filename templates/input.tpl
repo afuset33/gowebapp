@@ -6,8 +6,17 @@
 </head>
 <body>
     <h2>パスワード強度判定</h2>
-    <p>パスワード強度判定</p>
+    <p>パスワードを入力してください</p>
     <form method="POST" action="/result">
+        {{if ne (len .ErrMsg) 0}}
+        <ul>
+            {{range $i, $v := .ErrMsg}}
+            <li>
+                {{$v}}
+            </li>
+            {{end}}
+        </ul>
+        {{end}}
         <div>
             <input name="password" type="text"></input>
         </div>
