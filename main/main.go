@@ -22,6 +22,7 @@ type Result struct {
 ハンドラをリスナーに登録し、リスナーを起動します
 */
 func main() {
+	//http.Handle("/css/", http.StripPrefix("/css/", http.FileServer(http.Dir("css/"))))
 	http.HandleFunc("/", inputHandler)
 	http.HandleFunc("/result", resultHandler)
 	http.ListenAndServe(":8080", nil)

@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>パスワード強度判定結果</title>
+    <!--<link rel="stylesheet" type="text/css" href="../css/common.css">-->
 </head>
 <body>
     <h2>パスワード強度判定結果</h2>
@@ -15,7 +16,7 @@
         {{.ResultMsg}}
     </div>
     {{if ne (len .Suggestions) 0}}
-    <ul>
+    <ul class="errMsg">
         {{range $i, $v := .Suggestions}}
         <li>
             {{$v}}
