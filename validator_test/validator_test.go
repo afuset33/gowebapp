@@ -241,6 +241,24 @@ func TestCharType(t *testing.T) {
 	if actualMsg10 != expectedMsg10 {
 		t.Errorf("\ngot %s\nexpected %s\n", actualMsg10, expectedMsg10)
 	}
+
+	/*
+		未入力
+	*/
+	// input
+	value11 := ""
+	// expected
+	expectedValue11 := true
+	expectedMsg11 := ""
+	// exercise
+	actualValue11, actualMsg11 := validator.CharType(value11)
+	// verify
+	if actualValue11 != expectedValue11 {
+		t.Errorf("\ngot %s\nexpected %s\n", strconv.FormatBool(actualValue11), strconv.FormatBool(expectedValue11))
+	}
+	if actualMsg11 != expectedMsg11 {
+		t.Errorf("\ngot %s\nexpected %s\n", actualMsg11, expectedMsg11)
+	}
 }
 
 func TestMaxLength(t *testing.T) {
@@ -340,5 +358,23 @@ func TestMaxLength(t *testing.T) {
 	}
 	if actualMsg5 != expectedMsg5 {
 		t.Errorf("\ngot %s\nexpected %s\n", actualMsg5, expectedMsg5)
+	}
+
+	/*
+		未入力
+	*/
+	// input
+	value6 := ""
+	// expected
+	expectedValue6 := true
+	expectedMsg6 := ""
+	// exercise
+	actualValue6, actualMsg6 := validator.MaxLength(value6)
+	// verify
+	if actualValue6 != expectedValue6 {
+		t.Errorf("\ngot %s\nexpected %s\n", strconv.FormatBool(actualValue6), strconv.FormatBool(expectedValue6))
+	}
+	if actualMsg6 != expectedMsg6 {
+		t.Errorf("\ngot %s\nexpected %s\n", actualMsg6, expectedMsg6)
 	}
 }

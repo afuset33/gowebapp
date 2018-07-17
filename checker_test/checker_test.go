@@ -246,3 +246,213 @@ func TestComboUpperLowerCase(t *testing.T) {
 		t.Errorf("\ngot %s\nexpected %s\n", strconv.FormatBool(actual9), strconv.FormatBool(expected9))
 	}
 }
+
+func TestComboCharType(t *testing.T) {
+	/*
+		半角英字、半角数字
+		condition 2
+	*/
+	// input
+	value1 := "abcde12345"
+	condition1 := 2
+	// expected
+	expected1 := true
+	// exercise
+	actual1 := checker.ComboCharaType(value1, condition1)
+	// verify
+	if actual1 != expected1 {
+		t.Errorf("\ngot %s\nexpected %s\n", strconv.FormatBool(actual1), strconv.FormatBool(expected1))
+	}
+
+	/*
+		半角英字、半角記号
+		condition 2
+	*/
+	// input
+	value2 := "abcde@:[]"
+	condition2 := 2
+	// expected
+	expected2 := true
+	// exercise
+	actual2 := checker.ComboCharaType(value2, condition2)
+	// verify
+	if actual2 != expected2 {
+		t.Errorf("\ngot %s\nexpected %s\n", strconv.FormatBool(actual2), strconv.FormatBool(expected2))
+	}
+
+	/*
+		半角記号、半角数字
+		condition 2
+	*/
+	// input
+	value3 := "[@p:;1234567890"
+	condition3 := 2
+	// expected
+	expected3 := true
+	// exercise
+	actual3 := checker.ComboCharaType(value3, condition3)
+	// verify
+	if actual3 != expected3 {
+		t.Errorf("\ngot %s\nexpected %s\n", strconv.FormatBool(actual3), strconv.FormatBool(expected3))
+	}
+
+	/*
+		半角英字、半角数字、半角記号
+		condition 2
+	*/
+	// input
+	value4 := "abcABC0123456789[@];,'()"
+	condition4 := 2
+	// expected
+	expected4 := true
+	// exercise
+	actual4 := checker.ComboCharaType(value4, condition4)
+	// verify
+	if actual4 != expected4 {
+		t.Errorf("\ngot %s\nexpected %s\n", strconv.FormatBool(actual4), strconv.FormatBool(expected4))
+	}
+
+	/*
+		半角英字、半角カナ
+		condition 2
+	*/
+	// input
+	value5 := "abcdeｱｲｳｴｵﾜｦﾝ"
+	condition5 := 2
+	// expected
+	expected5 := false
+	// exercise
+	actual5 := checker.ComboCharaType(value5, condition5)
+	// verify
+	if actual5 != expected5 {
+		t.Errorf("\ngot %s\nexpected %s\n", strconv.FormatBool(actual5), strconv.FormatBool(expected5))
+	}
+
+	/*
+		半角英字、半角数字、半角記号、半角カナ
+		condition 2
+	*/
+	// input
+	value6 := "abcdeABCDE1234567890:;@'(&%ｱｲｳｴｵﾜｦﾝ"
+	condition6 := 2
+	// expected
+	expected6 := true
+	// exercise
+	actual6 := checker.ComboCharaType(value6, condition6)
+	// verify
+	if actual6 != expected6 {
+		t.Errorf("\ngot %s\nexpected %s\n", strconv.FormatBool(actual6), strconv.FormatBool(expected6))
+	}
+
+	/*
+		半角英字
+		condition 2
+	*/
+	// input
+	value7 := "abcdeABCDE"
+	condition7 := 2
+	// expected
+	expected7 := false
+	// exercise
+	actual7 := checker.ComboCharaType(value7, condition7)
+	// verify
+	if actual7 != expected7 {
+		t.Errorf("\ngot %s\nexpected %s\n", strconv.FormatBool(actual7), strconv.FormatBool(expected7))
+	}
+
+	/*
+		半角数字
+		condition 2
+	*/
+	// input
+	value8 := "0123456789"
+	condition8 := 2
+	// expected
+	expected8 := false
+	// exercise
+	actual8 := checker.ComboCharaType(value8, condition8)
+	// verify
+	if actual8 != expected8 {
+		t.Errorf("\ngot %s\nexpected %s\n", strconv.FormatBool(actual8), strconv.FormatBool(expected8))
+	}
+
+	/*
+		半角記号
+		condition 2
+	*/
+	// input
+	value9 := "!\"#$%&'()*+,-./:;<=>?@[\\]^_`{|}~"
+	condition9 := 2
+	// expected
+	expected9 := false
+	// exercise
+	actual9 := checker.ComboCharaType(value9, condition9)
+	// verify
+	if actual9 != expected9 {
+		t.Errorf("\ngot %s\nexpected %s\n", strconv.FormatBool(actual9), strconv.FormatBool(expected9))
+	}
+
+	/*
+		半角英字、半角数字
+		condition 3
+	*/
+	// input
+	value10 := "abcde12345"
+	condition10 := 3
+	// expected
+	expected10 := false
+	// exercise
+	actual10 := checker.ComboCharaType(value10, condition10)
+	// verify
+	if actual10 != expected10 {
+		t.Errorf("\ngot %s\nexpected %s\n", strconv.FormatBool(actual10), strconv.FormatBool(expected10))
+	}
+
+	/*
+		入力無し
+		condition 2
+	*/
+	// input
+	value11 := ""
+	condition11 := 2
+	// expected
+	expected11 := false
+	// exercise
+	actual11 := checker.ComboCharaType(value11, condition11)
+	// verify
+	if actual11 != expected11 {
+		t.Errorf("\ngot %s\nexpected %s\n", strconv.FormatBool(actual11), strconv.FormatBool(expected11))
+	}
+
+	/*
+		半角英字
+		condition 0
+	*/
+	// input
+	value12 := "abcXYZ"
+	condition12 := 0
+	// expected
+	expected12 := true
+	// exercise
+	actual12 := checker.ComboCharaType(value12, condition12)
+	// verify
+	if actual12 != expected12 {
+		t.Errorf("\ngot %s\nexpected %s\n", strconv.FormatBool(actual12), strconv.FormatBool(expected12))
+	}
+
+	/*
+		入力無し
+		condition 0
+	*/
+	// input
+	value13 := ""
+	condition13 := 0
+	// expected
+	expected13 := true
+	// exercise
+	actual13 := checker.ComboCharaType(value13, condition13)
+	// verify
+	if actual13 != expected13 {
+		t.Errorf("\ngot %s\nexpected %s\n", strconv.FormatBool(actual13), strconv.FormatBool(expected13))
+	}
+}
