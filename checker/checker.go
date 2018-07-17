@@ -105,7 +105,8 @@ func CommonWords(value string) (result bool) {
 	rows := service.ReadAll()
 	for _, row := range rows {
 		for _, item := range row {
-			result = -1 == strings.Index(value, item)
+			hit, _ := regexp.MatchString("(?i)"+item, value)
+			result = !hit
 			if !result {
 				log.Printf("call CommonWords: result{%s}", strconv.FormatBool(result))
 				return

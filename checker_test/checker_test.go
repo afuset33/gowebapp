@@ -666,3 +666,137 @@ func TestContinuousChar(t *testing.T) {
 		t.Errorf("\ngot %s\nexpected %s\n", strconv.FormatBool(actual13), strconv.FormatBool(expected13))
 	}
 }
+
+func TestCommonWords(t *testing.T) {
+	/*
+		辞書に登録した単語と完全一致
+		password
+	*/
+	// input
+	value1 := "password"
+	// expected
+	expected1 := false
+	// exercise
+	actual1 := checker.CommonWords(value1)
+	// verify
+	if actual1 != expected1 {
+		t.Errorf("\ngot %s\nexpected %s\n", strconv.FormatBool(actual1), strconv.FormatBool(expected1))
+	}
+
+	/*
+		辞書に登録した単語を先頭に含む
+		password
+	*/
+	value2 := "password123:jiAbo@["
+	// expected
+	expected2 := false
+	// exercise
+	actual2 := checker.CommonWords(value2)
+	// verify
+	if actual2 != expected2 {
+		t.Errorf("\ngot %s\nexpected %s\n", strconv.FormatBool(actual2), strconv.FormatBool(expected2))
+	}
+
+	/*
+		辞書に登録した単語を中間に含む
+		password
+	*/
+	// input
+	value3 := "132:ajipassword[]()="
+	// expected
+	expected3 := false
+	// exercise
+	actual3 := checker.CommonWords(value3)
+	// verify
+	if actual3 != expected3 {
+		t.Errorf("\ngot %s\nexpected %s\n", strconv.FormatBool(actual3), strconv.FormatBool(expected3))
+	}
+
+	/*
+		辞書に登録した単語を末尾に含む
+		football
+	*/
+	// input
+	value4 := "ji:123]o()football"
+	// expected
+	expected4 := false
+	// exercise
+	actual4 := checker.CommonWords(value4)
+	// verify
+	if actual4 != expected4 {
+		t.Errorf("\ngot %s\nexpected %s\n", strconv.FormatBool(actual4), strconv.FormatBool(expected4))
+	}
+
+	/*
+		辞書に登録された単語（大文字）を含む
+		password
+	*/
+	// input
+	value5 := "PASSWORDbaji*AC7-"
+	// expected
+	expected5 := false
+	// exercise
+	actual5 := checker.CommonWords(value5)
+	// verify
+	if actual5 != expected5 {
+		t.Errorf("\ngot %s\nexpected %s\n", strconv.FormatBool(actual5), strconv.FormatBool(expected5))
+	}
+
+	/*
+		辞書に登録された単語（小文字大文字混合）を含む
+		password
+	*/
+	// input
+	value6 := ",ajiAPaSsWorDji]132"
+	// expected
+	expected6 := false
+	// exercise
+	actual6 := checker.CommonWords(value6)
+	// verify
+	if actual6 != expected6 {
+		t.Errorf("\ngot %s\nexpected %s\n", strconv.FormatBool(actual6), strconv.FormatBool(expected6))
+	}
+
+	/*
+		辞書に登録されていないワードを含む
+	*/
+	// input
+	value7 := "ab,jpy6-][@EabC"
+	// expected
+	expected7 := true
+	// exercise
+	actual7 := checker.CommonWords(value7)
+	// verify
+	if actual7 != expected7 {
+		t.Errorf("\ngot %s\nexpected %s\n", strconv.FormatBool(actual7), strconv.FormatBool(expected7))
+	}
+
+	/*
+		辞書に登録された単語の一部を含む
+		passwor
+	*/
+	// input
+	value8 := "Dba123passwor7-jkoD:,"
+	// expected
+	expected8 := true
+	// exercsie
+	actual8 := checker.CommonWords(value8)
+	// verify
+	if actual8 != expected8 {
+		t.Errorf("\ngot %s\nexpected %s\n", strconv.FormatBool(actual8), strconv.FormatBool(expected8))
+	}
+
+	/*
+		未入力
+	*/
+	// input
+	value9 := ""
+	// expected
+	expected9 := true
+	// exercise
+	actual9 := checker.CommonWords(value9)
+	// verify
+	if actual9 != expected9 {
+		t.Errorf("\ngot %s\nexpected %s\n", strconv.FormatBool(actual9), strconv.FormatBool(expected9))
+	}
+}
