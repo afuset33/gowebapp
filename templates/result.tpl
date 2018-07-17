@@ -16,6 +16,7 @@
         {{.ResultMsg}}
     </div>
     {{if ne (len .Suggestions) 0}}
+    <p>パスワードの強度を上げるには以下の提案を参考にしてください</p>
     <ul class="errMsg">
         {{range $i, $v := .Suggestions}}
         <li>

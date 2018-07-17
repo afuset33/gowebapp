@@ -13,9 +13,9 @@ LengthCheck
 対象文字列が指定桁数以上であるかを調べます
 引数で指定した以上の桁数であることが、判定結果OKとなるための条件です
 */
-func LengthCheck(value string, length int) (result bool) {
-	result = len(value) >= length
-	log.Printf("call LengthCheck: result{%s}", strconv.FormatBool(result))
+func LengthCheck(value string, length int) (ok bool) {
+	ok = len(value) >= length
+	log.Printf("call LengthCheck: ok{%s}", strconv.FormatBool(ok))
 	return
 }
 
@@ -24,11 +24,11 @@ ComboUpperLowerCase
 対象文字列が大文字英字と小文字英字を含んでいるかを調べます
 TODO:肯定先読みができるライブラリを使う（^(?=.*[a-z]+)(?=.*[A-Z]+)[a-zA-Z]+$）
 */
-func ComboUpperLowerCase(value string) (result bool) {
+func ComboUpperLowerCase(value string) (ok bool) {
 	isUpper, _ := regexp.MatchString(".*[A-Z]+", value)
 	isLower, _ := regexp.MatchString(".*[a-z]+", value)
-	result = isUpper && isLower
-	log.Printf("call ComboUpperLowerCase: result{%s}", strconv.FormatBool(result))
+	ok = isUpper && isLower
+	log.Printf("call ComboUpperLowerCase: ok{%s}", strconv.FormatBool(ok))
 	return
 }
 
@@ -37,7 +37,7 @@ ComboCharaType
 対象文字列が半角英字、半角数字、半角記号の組み合わせを含んでいるかを調べます
 引数で指定した数以上の文字種を含んでいることが、判定結果OKとなるための条件です。
 */
-func ComboCharaType(value string, condition int) (result bool) {
+func ComboCharaType(value string, condition int) (ok bool) {
 	includeHalfWidthAlpha, _ := regexp.MatchString(".*[a-zA-Z]+", value)
 	includeHalfWidthDigit, _ := regexp.MatchString(".*[0-9]+", value)
 	includeHalfWidthSign, _ := regexp.MatchString(".*[!-/:-@¥[-`{-~]+", value)
@@ -51,8 +51,8 @@ func ComboCharaType(value string, condition int) (result bool) {
 	if includeHalfWidthSign {
 		satisfy++
 	}
-	result = satisfy >= condition
-	log.Printf("call ComboCharaType: result{%s} satisfy{%s}", strconv.FormatBool(result), strconv.Itoa(satisfy))
+	ok = satisfy >= condition
+	log.Printf("call ComboCharaType: ok{%s} satisfy{%s}", strconv.FormatBool(ok), strconv.Itoa(satisfy))
 	return
 }
 
@@ -63,12 +63,12 @@ ContinuousChar
 TODO:正規表現で後方参照を使えるように
 */
 /*
-func ContinuousChar(value string, condition int) (result bool) {
+func ContinuousChar(value string, condition int) (ok bool) {
 	re := regexp.MustCompilePOSIX(regexp.QuoteMeta(".*(.)\\1{" + strconv.Itoa(condition-1) + ",}"))
 	match := re.FindString(value)
-	result = !re.MatchString(value)
+	ok = !re.MatchString(value)
 	log.Print(match)
-	log.Printf("call ContinuousChar: result-%s", strconv.FormatBool(result))
+	log.Printf("call ContinuousChar: ok-%s", strconv.FormatBool(ok))
 	return
 }
 */
@@ -78,20 +78,20 @@ ContinuousChar
 対象文字列に同じ文字が連続して含まれていないことを調べます
 引数で指定した回数未満の繰り返しに抑えられていることが、判定結果OKとなるための条件です
 */
-func ContinuousChar(value string, condition int) (result bool) {
-	result = true
+func ContinuousChar(value string, condition int) (ok bool) {
+	ok = true
 	for _, c := range value {
 		var regex string
 		for i := 0; i < condition; i++ {
 			regex += string(rune(c))
 		}
-		result = -1 == strings.Index(value, regex)
-		if !result {
+		ok = -1 == strings.Index(value, regex)
+		if !ok {
 			break
 		}
 	}
 
-	log.Printf("call ContinuousChar: result{%s}", strconv.FormatBool(result))
+	log.Printf("call ContinuousChar: ok{%s}", strconv.FormatBool(ok))
 	return
 }
 
@@ -100,20 +100,20 @@ CommonWords
 対象の文字列が一般的な単語を使用していないか調べます
 一般的な単語は設定用のファイルから読み込みます
 */
-func CommonWords(value string) (result bool) {
+func CommonWords(value string) (ok bool) {
 
 	rows := service.ReadAll()
 	for _, row := range rows {
 		for _, item := range row {
 			hit, _ := regexp.MatchString("(?i)"+item, value)
-			result = !hit
-			if !result {
-				log.Printf("call CommonWords: result{%s}", strconv.FormatBool(result))
+			ok = !hit
+			if !ok {
+				log.Printf("call CommonWords: ok{%s}", strconv.FormatBool(ok))
 				return
 			}
 		}
 	}
-	log.Printf("call CommonWords: result{%s}", strconv.FormatBool(result))
+	log.Printf("call CommonWords: ok{%s}", strconv.FormatBool(ok))
 	return
 }
 

@@ -9,9 +9,9 @@
     <h2>パスワード強度判定</h2>
     <p>パスワードを入力してください</p>
     <form method="POST" action="/result">
-        {{if ne (len .ErrMsg) 0}}
+        {{if ne (len .ErrMsgs) 0}}
         <ul class="errMsg">
-            {{range $i, $v := .ErrMsg}}
+            {{range $i, $v := .ErrMsgs}}
             <li>
                 {{$v}}
             </li>

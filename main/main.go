@@ -9,7 +9,7 @@ import (
 )
 
 type Input struct {
-	ErrMsg []string
+	ErrMsgs []string
 }
 
 type Result struct {
@@ -53,7 +53,7 @@ func resultHandler(w http.ResponseWriter, r *http.Request) {
 	// バリデーションチェック
 	if valid, errMsgs := validation(password); !valid {
 		input := Input{
-			ErrMsg: errMsgs}
+			ErrMsgs: errMsgs}
 		// テンプレートをパース
 		t := template.Must(template.ParseFiles("../templates/input.tpl"))
 		// テンプレートを描画
