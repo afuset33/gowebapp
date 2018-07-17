@@ -456,3 +456,213 @@ func TestComboCharType(t *testing.T) {
 		t.Errorf("\ngot %s\nexpected %s\n", strconv.FormatBool(actual13), strconv.FormatBool(expected13))
 	}
 }
+
+func TestContinuousChar(t *testing.T) {
+	/*
+		先頭半角英字3文字連続
+		condition 3
+	*/
+	// input
+	value1 := "aaabcdefji[@;(=695"
+	condition1 := 3
+	// expected
+	expected1 := false
+	// exercise
+	actual1 := checker.ContinuousChar(value1, condition1)
+	// verify
+	if actual1 != expected1 {
+		t.Errorf("\ngot %s\nexpected %s\n", strconv.FormatBool(actual1), strconv.FormatBool(expected1))
+	}
+
+	/*
+		中間半角英字3文字連続
+		condition 3
+	*/
+	// input
+	value2 := "abcccdjilacb1235@')&]"
+	condition2 := 3
+	// expected
+	expected2 := false
+	//exercise
+	actual2 := checker.ContinuousChar(value2, condition2)
+	// verify
+	if actual2 != expected2 {
+		t.Errorf("\ngot %s\nexpected %s\n", strconv.FormatBool(actual2), strconv.FormatBool(expected2))
+	}
+
+	/*
+		末尾半角英字3文字連続
+		condition 3
+	*/
+	// input
+	value3 := "abcd1235@]'=&ccc"
+	condition3 := 3
+	// expected
+	expected3 := false
+	// exercise
+	actual3 := checker.ContinuousChar(value3, condition3)
+	// verify
+	if actual3 != expected3 {
+		t.Errorf("\ngot %s\nexpected %s\n", strconv.FormatBool(actual3), strconv.FormatBool(expected3))
+	}
+
+	/*
+		半角数字3文字連続
+		condition 3
+	*/
+	// input
+	value4 := "ajil1380;@333:ab"
+	condition4 := 3
+	// expected
+	expected4 := false
+	// exercise
+	actual4 := checker.ContinuousChar(value4, condition4)
+	// verify
+	if actual4 != expected4 {
+		t.Errorf("\ngot %s\nexpected %s\n", strconv.FormatBool(actual4), strconv.FormatBool(expected4))
+	}
+
+	/*
+		半角記号3文字連続
+		condition 3
+	*/
+	// input
+	value5 := "abcde12356:(&=@@@ba"
+	condition5 := 3
+	// expected
+	expected5 := false
+	// exercise
+	actual5 := checker.ContinuousChar(value5, condition5)
+	// verify
+	if actual5 != expected5 {
+		t.Errorf("\ngot %s\nexpected %s\n", strconv.FormatBool(actual5), strconv.FormatBool(expected5))
+	}
+
+	/*
+		全角英字3文字連続
+		condition 3
+	*/
+	// input
+	value6 := "ａｂｃＸＹＺＱＱＱＺＹＡ"
+	condition6 := 3
+	// expected
+	expected6 := false
+	// exercise
+	actual6 := checker.ContinuousChar(value6, condition6)
+	// verify
+	if actual6 != expected6 {
+		t.Errorf("\ngot %s\nexpected %s\n", strconv.FormatBool(actual6), strconv.FormatBool(expected6))
+	}
+
+	/*
+		半角英字4文字連続
+		condition 3
+	*/
+	// input
+	value7 := "abcddddxyzZ:1356"
+	condition7 := 3
+	// expected
+	expected7 := false
+	// exercise
+	actual7 := checker.ContinuousChar(value7, condition7)
+	// verify
+	if actual7 != expected7 {
+		t.Errorf("\ngot %s\nexpected %s\n", strconv.FormatBool(actual7), strconv.FormatBool(expected7))
+	}
+
+	/*
+		半角英字2文字連続
+		condition 3
+	*/
+	// input
+	value8 := "aacab3jil:3"
+	condition8 := 3
+	// expected
+	expected8 := true
+	// exercise
+	actual8 := checker.ContinuousChar(value8, condition8)
+	// verify
+	if actual8 != expected8 {
+		t.Errorf("\ngot %s\nexpected %s\n", strconv.FormatBool(actual8), strconv.FormatBool(expected8))
+	}
+
+	/*
+		半角英字3文字出現非連続
+		condition 3
+	*/
+	// input
+	value9 := "abcega,70a1]"
+	condition9 := 3
+	// expected
+	expected9 := true
+	// exercise
+	actual9 := checker.ContinuousChar(value9, condition9)
+	// verify
+	if actual9 != expected9 {
+		t.Errorf("\ngot %s\nexpected %s\n", strconv.FormatBool(actual9), strconv.FormatBool(expected9))
+	}
+
+	/*
+		半角英字2文字連続
+		condition 2
+	*/
+	// input
+	value10 := "aacab3jil:3"
+	condition10 := 2
+	// expected
+	expected10 := false
+	// exercise
+	actual10 := checker.ContinuousChar(value10, condition10)
+	// verify
+	if actual10 != expected10 {
+		t.Errorf("\ngot %s\nexpected %s\n", strconv.FormatBool(actual10), strconv.FormatBool(expected10))
+	}
+
+	/*
+		未入力
+		condition 3
+	*/
+	// input
+	value11 := ""
+	condition11 := 3
+	// expected
+	expected11 := true
+	// exercise
+	actual11 := checker.ContinuousChar(value11, condition11)
+	// verify
+	if actual11 != expected11 {
+		t.Errorf("\ngot %s\nexpected %s\n", strconv.FormatBool(actual11), strconv.FormatBool(expected11))
+	}
+
+	/*
+		入力あり
+		condition 0
+	*/
+	// input
+	value12 := "abc60ji]@"
+	condition12 := 0
+	// expected
+	expected12 := false
+	// exercise
+	actual12 := checker.ContinuousChar(value12, condition12)
+	// verify
+	if actual12 != expected12 {
+		t.Errorf("\ngot %s\nexpected %s\n", strconv.FormatBool(actual12), strconv.FormatBool(expected12))
+	}
+
+	/*
+		入力無し
+		condition 0
+	*/
+	// input
+	value13 := ""
+	condition13 := 0
+	// expected
+	expected13 := true
+	// exercise
+	actual13 := checker.ContinuousChar(value13, condition13)
+	// verify
+	if actual13 != expected13 {
+		t.Errorf("\ngot %s\nexpected %s\n", strconv.FormatBool(actual13), strconv.FormatBool(expected13))
+	}
+}

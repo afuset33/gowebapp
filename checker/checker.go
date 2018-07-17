@@ -79,7 +79,7 @@ ContinuousChar
 引数で指定した回数未満の繰り返しに抑えられていることが、判定結果OKとなるための条件です
 */
 func ContinuousChar(value string, condition int) (result bool) {
-
+	result = true
 	for _, c := range value {
 		var regex string
 		for i := 0; i < condition; i++ {
@@ -87,8 +87,7 @@ func ContinuousChar(value string, condition int) (result bool) {
 		}
 		result = -1 == strings.Index(value, regex)
 		if !result {
-			log.Printf("call ContinuousChar: result{%s}", strconv.FormatBool(result))
-			return
+			break
 		}
 	}
 
