@@ -10,11 +10,11 @@ import (
 CSVファイル全体を読み込み、スライスにして返却します
 */
 func ReadAll() (rows [][]string) {
-	log.Printf("call ReadLine")
+	log.Printf("call ReadAll")
 	fr, errOpen := os.Open("../config/dictionary.csv")
 
 	if errOpen != nil {
-		log.Fatal("ReadLine file open")
+		log.Fatal("ReadAll file open")
 	}
 
 	defer fr.Close()
@@ -23,7 +23,7 @@ func ReadAll() (rows [][]string) {
 
 	rows, errRead := r.ReadAll()
 	if errRead != nil {
-		log.Fatal("ReadLine csv reading")
+		log.Fatal("ReadAll csv reading")
 	}
 	return
 }
