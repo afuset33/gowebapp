@@ -665,6 +665,22 @@ func TestContinuousChar(t *testing.T) {
 	if actual13 != expected13 {
 		t.Errorf("\ngot %s\nexpected %s\n", strconv.FormatBool(actual13), strconv.FormatBool(expected13))
 	}
+
+	/*
+		半角英字3文字連続2回
+		condition 3
+	*/
+	// input
+	value14 := "abcccjiLLL"
+	condition14 := 3
+	// expected
+	expected14 := false
+	// exercise
+	actual14 := checker.ContinuousChar(value14, condition14)
+	// verify
+	if actual14 != expected14 {
+		t.Errorf("\ngot %s\nexpected %s\n", strconv.FormatBool(actual14), strconv.FormatBool(expected14))
+	}
 }
 
 func TestCommonWords(t *testing.T) {
@@ -798,5 +814,110 @@ func TestCommonWords(t *testing.T) {
 	// verify
 	if actual9 != expected9 {
 		t.Errorf("\ngot %s\nexpected %s\n", strconv.FormatBool(actual9), strconv.FormatBool(expected9))
+	}
+
+	/*
+		辞書登録済みの単語2回
+	*/
+	// input
+	value10 := "password,ji;acPaSSWORD"
+	// expected
+	expected10 := false
+	// exercise
+	actual10 := checker.CommonWords(value10)
+	// verify
+	if actual10 != expected10 {
+		t.Errorf("\ngot %s\nexpected %s\n", strconv.FormatBool(actual10), strconv.FormatBool(expected10))
+	}
+}
+
+func TestGetSatisfiedCondition(t *testing.T) {
+	/*
+		充足：〇 不足：×
+		〇：LengthCheck
+		〇：ComboUpperLowerCase
+		〇：ComboCharaType
+		〇：ContinuousChar
+		〇：CommonWords
+	*/
+	// input
+	value1 := "bajiA:c]70213ACk"
+	// expected
+	expectedInt1 := 5
+	expectedMsgLen1 := 0
+	// exercise
+	actualInt1, actualMsg1 := checker.GetSatisfiedCondition(value1)
+	// verify
+	if actualInt1 != expectedInt1 {
+		t.Errorf("\ngot %s\nexpected %s\n", strconv.Itoa(actualInt1), strconv.Itoa(expectedInt1))
+	}
+	if len(actualMsg1) != expectedMsgLen1 {
+		t.Errorf("\ngot %s\nexpected %s\n", strconv.Itoa(len(actualMsg1)), strconv.Itoa(expectedMsgLen1))
+	}
+
+	/*
+		充足：〇 不足：×
+		×：LengthCheck
+		×：ComboUpperLowerCase
+		×：ComboCharaType
+		〇：ContinuousChar
+		×：CommonWords
+	*/
+	// input
+	value2 := "welcome"
+	// expected
+	expectedInt2 := 1
+	expectedMsgLen2 := 4
+	expectedMsg2_1 := "8文字以上にしてください"
+	expectedMsg2_2 := "大文字と小文字の組み合わせにしてください"
+	expectedMsg2_3 := "文字種（英字、数字、記号等）を組み合わせましょう"
+	expectedMsg2_4 := "一般的な単語を使用するのはやめましょう"
+	// exercise
+	actualInt2, actualMsg2 := checker.GetSatisfiedCondition(value2)
+	// verify
+	if actualInt2 != expectedInt2 {
+		t.Errorf("\ngot %s\nexpected %s\n", strconv.Itoa(actualInt2), strconv.Itoa(expectedInt2))
+	}
+	if len(actualMsg2) != expectedMsgLen2 {
+		t.Errorf("\ngot %s\nexpected %s\n", strconv.Itoa(len(actualMsg2)), strconv.Itoa(expectedMsgLen2))
+	}
+	if actualMsg2[0] != expectedMsg2_1 {
+		t.Errorf("\ngot %s\nexpected %s\n", actualMsg2[0], expectedMsg2_1)
+	}
+	if actualMsg2[1] != expectedMsg2_2 {
+		t.Errorf("\ngot %s\nexpected %s\n", actualMsg2[1], expectedMsg2_2)
+	}
+	if actualMsg2[2] != expectedMsg2_3 {
+		t.Errorf("\ngot %s\nexpected %s\n", actualMsg2[2], expectedMsg2_3)
+	}
+	if actualMsg2[3] != expectedMsg2_4 {
+		t.Errorf("\ngot %s\nexpected %s\n", actualMsg2[3], expectedMsg2_4)
+	}
+
+	/*
+		充足：〇 不足：×
+		〇：LengthCheck
+		〇：ComboUpperLowerCase
+		〇：ComboCharaType
+		×：ContinuousChar
+		〇：CommonWords
+	*/
+	// input
+	value3 := "aaacJI:346CC"
+	// expected
+	expectedInt3 := 4
+	expectedMsgLen3 := 1
+	expectedMsg3 := "同じ文字を連続して使用するのはやめましょう"
+	// exercise
+	actualInt3, actualMsg3 := checker.GetSatisfiedCondition(value3)
+	// verify
+	if actualInt3 != expectedInt3 {
+		t.Errorf("\ngot %s\nexpected %s\n", strconv.Itoa(actualInt3), strconv.Itoa(expectedInt3))
+	}
+	if len(actualMsg3) != expectedMsgLen3 {
+		t.Errorf("\ngot %s\nexpected %s\n", strconv.Itoa(len(actualMsg3)), strconv.Itoa(expectedMsgLen3))
+	}
+	if actualMsg3[0] != expectedMsg3 {
+		t.Errorf("\ngot %s\nexpected %s\n", actualMsg3[0], expectedMsg3)
 	}
 }
