@@ -1,6 +1,7 @@
 package checker
 
 import (
+	"gowebapp/jsonReader"
 	"gowebapp/service"
 	"log"
 	"regexp"
@@ -124,22 +125,24 @@ TODO:理想は引数に与えられた関数だけを呼び出す
 func GetSatisfiedCondition(function ...func) (satisfy int)
 */
 func GetSatisfiedCondition(password string) (satisfy int, suggestions []string) {
-	if LengthCheck(password, 8) {
+	// 設定ファイルの読み込み
+	conf := jsonReader.ReadAll()
+	if LengthCheck(password, conf.Length) {
 		satisfy++
 	} else {
-		suggestions = append(suggestions, "8文字以上にしてください")
+		suggestions = append(suggestions, strconv.Itoa(conf.Length)+"文字以上にしてください")
 	}
 	if ComboUpperLowerCase(password) {
 		satisfy++
 	} else {
 		suggestions = append(suggestions, "大文字と小文字の組み合わせにしてください")
 	}
-	if ComboCharaType(password, 2) {
+	if ComboCharaType(password, conf.NumComboChar) {
 		satisfy++
 	} else {
 		suggestions = append(suggestions, "文字種（英字、数字、記号等）を組み合わせましょう")
 	}
-	if ContinuousChar(password, 3) {
+	if ContinuousChar(password, conf.NumContinuousChar) {
 		satisfy++
 	} else {
 		suggestions = append(suggestions, "同じ文字を連続して使用するのはやめましょう")
