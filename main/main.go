@@ -22,7 +22,7 @@ type Result struct {
 ハンドラをリスナーに登録し、リスナーを起動します
 */
 func main() {
-	http.Handle("/resources/", http.StripPrefix("/resources/", http.FileServer(http.Dir("resources/"))))
+	http.Handle("/resources/", http.StripPrefix("/resources/", http.FileServer(http.Dir("../resources/"))))
 	http.HandleFunc("/", inputHandler)
 	http.HandleFunc("/result", resultHandler)
 	http.ListenAndServe(":8080", nil)
@@ -33,7 +33,7 @@ func main() {
 */
 func inputHandler(w http.ResponseWriter, r *http.Request) {
 	// テンプレートをパース
-	t := template.Must(template.ParseFiles("./templates/input.html"))
+	t := template.Must(template.ParseFiles("../templates/input.html"))
 
 	// テンプレートを描画
 	if err := t.ExecuteTemplate(w, "input.html", new(Input)); err != nil {
@@ -55,18 +55,17 @@ func resultHandler(w http.ResponseWriter, r *http.Request) {
 		input := Input{
 			ErrMsgs: errMsgs}
 		// テンプレートをパース
-		t := template.Must(template.ParseFiles("./templates/input.html"))
+		t := template.Must(template.ParseFiles("../templates/input.html"))
 		// テンプレートを描画
 		if err := t.ExecuteTemplate(w, "input.html", input); err != nil {
 			log.Fatal(err)
 		}
-		log.Printf("bariche")
 		log.Printf("call resultHandler")
 		return
 	}
 
 	// テンプレートをパース
-	t := template.Must(template.ParseFiles("./templates/result.html"))
+	t := template.Must(template.ParseFiles("../templates/result.html"))
 
 	// パスワードの強度を判定
 	var strength string

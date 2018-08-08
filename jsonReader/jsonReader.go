@@ -14,7 +14,7 @@ type PasswordCheckerConfig struct {
 }
 
 func ReadAll() (conf PasswordCheckerConfig) {
-	raw, err := ioutil.ReadFile("./config/config.json")
+	raw, err := ioutil.ReadFile("../config/config.json")
 	if err != nil {
 		log.Print(err.Error())
 		os.Exit(1)
